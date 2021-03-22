@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -5,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Teacher_Control.Areas.Identity;
+using Teacher_Control.BLL;
 using Teacher_Control.Data;
 
 namespace Teacher_Control
@@ -42,8 +45,24 @@ namespace Teacher_Control
 
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
+            services.AddSingleton<WeatherForecastService>();
+            services.AddControllers(config => {
+                var policy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .Build();
 
-            //services.AddSingleton<WeatherForecastService>();
+                config.Filters.Add(new AuthorizeFilter(policy));
+
+            });
+
+           
+
+            //Adding BLL Injections
+            services.AddTransient<AsignaturasBLL>();
+            services.AddTransient<EstudiantesBLL>();
+            services.AddTransient<InscripcionBLL>();
+            services.AddTransient<SemestresBLL>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
