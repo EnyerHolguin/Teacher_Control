@@ -1,0 +1,128 @@
+﻿<h3>RegEstudiantes</h3>
+@using Teacher_Control.BLL;
+@using Teacher_Control.Models;
+@page "/Asignaturas"
+@page "/Asignaturas/{AsignaturaId:int}"
+
+
+
+<EditForm Model="asignaturas" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+    <div class="card">
+        <div class="card-header">
+            <h3>Registro de Estudiantes</h3>
+        </div>
+
+        <div class="card-body">
+            <form>
+
+                <div class="form-row align-items-center">
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Persona Id</label>
+                            <div class="input-group">
+                                <InputNumber @bind-Value="asignaturas.AsignaturaId" class="form-control" />
+                                <div class="input-group-append ml-2">
+                                    <button type="button" style="z-index:0" class="btn btn-secondary input-group-text" @onclick="Buscar">Buscar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Nombres</label>
+                    <InputText @bind-Value="asignaturas.Descripcion" class="form-control" />
+                    <ValidationMessage For="@(() => asignaturas.Descripcion)" />
+                </div>
+
+               
+
+            </form>
+        </div>
+
+        <div class="card-footer">
+            <div class="form-group text-center" display: inline-block>
+                <button type="button" class="btn btn-primary" @onclick="Nuevo">Nuevo</button>
+                <button type="submit" class="btn btn-success">Guardar</button>
+                <button type="button" class="btn btn-danger" @onclick="Eliminar">Eliminar</button>
+            </div>
+        </div>
+
+    </div>
+</EditForm>
+
+@code {
+    string Mensaje = string.Empty;
+
+    [Inject]
+    private AsignaturasBLL asignaturasBLL { get; set; }
+
+    [Parameter]
+    public int AsignaturaId { get; set; }
+
+    Asignaturas asignaturas = new Asignaturas();
+
+    protected override void OnInitialized()
+    {
+        Nuevo();
+    }
+
+    public async void Buscar()
+    {
+        var registro = await asignaturasBLL.Buscar(asignaturas.AsignaturaId);
+
+        if (registro != null)
+        {
+            this.asignaturas = registro;
+
+        }
+        else
+        {
+            Mensaje = ("pudo ser encontrado el registro.");
+        }
+    }
+
+    public void Nuevo()
+    {
+        Limpiar();
+    }
+
+    public async void Guardar()
+    {
+
+        if (await asignaturasBLL.Guardar(asignaturas))
+        {
+
+            Mensaje = ("Guardado");
+            Limpiar();
+
+        }
+        else
+        {
+            Mensaje = ("No se ser guardado  el registro.");
+
+        }
+    }
+
+    public async void Eliminar()
+    {
+        if (await asignaturasBLL.Eliminar(asignaturas.AsignaturaId))
+        {
+            Mensaje = ("Eliminado");
+            Limpiar();
+        }
+        else
+        {
+            Mensaje = ("No se logró eliminar el registro.");
+
+        }
+    }
+
+    public void Limpiar()
+    {
+        this.asignaturas = new Asignaturas();
+    }
+
+
+}
