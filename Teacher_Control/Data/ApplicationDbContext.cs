@@ -25,7 +25,7 @@ namespace Teacher_Control.Data
             if (!optionsBuilder.IsConfigured)
             {
 
-                optionsBuilder.UseSqlServer("Server=proyectofinalap2.database.windows.net;Database=Teacher_control;User ID=Teacher_Control;Password=intern@Aplicada2;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+               // optionsBuilder.UseSqlServer("Server=proyectofinalap2.database.windows.net;Database=Teacher_control;User ID=Teacher_Control;Password=intern@Aplicada2;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             }
 
 

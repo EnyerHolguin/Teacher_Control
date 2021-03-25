@@ -32,7 +32,8 @@ namespace Teacher_Control.BLL
 
             try
             {
-                ok = await _contexto.Semestre.AnyAsync(i => i.SemestreId == id);
+                ok = await _contexto.Semestre.
+                    AnyAsync(i => i.SemestreId == id);
             }
             catch (Exception)
             {
@@ -84,7 +85,10 @@ namespace Teacher_Control.BLL
 
             try
             {
-                semestres = await _contexto.Semestre.Where(s => s.SemestreId == id).AsNoTracking().SingleOrDefaultAsync();
+                semestres = await _contexto.Semestre
+                    .Where(s => s.SemestreId == id)
+                    .AsNoTracking()
+                    .SingleOrDefaultAsync();
 
                 var aux = _contexto.Set<Semestres>().Local.SingleOrDefault(s => s.SemestreId == id);
                 if (aux != null)
@@ -118,24 +122,6 @@ namespace Teacher_Control.BLL
             }
 
             return ok;
-        }
-
-        public async Task<List<Semestres>> GetHabilidades(Expression<Func<Semestres, bool>> criterio)
-        {
-            List<Semestres> lista = new List<Semestres>();
-
-            try
-            {
-                lista = await _contexto.Semestre.Where(criterio).ToListAsync();
-                
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-
-            return lista;
         }
     }
 }

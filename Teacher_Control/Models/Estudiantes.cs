@@ -14,7 +14,7 @@ namespace Teacher_Control.Models
         public string Apellidos { get; set; }
         public string Telefono { get; set; }
         public string Email { get; set; }
-        public DateTime FechaNacimiento { get; set; }
+        public DateTime FechaNacimiento { get; set; } = DateTime.Now;
         public int Matricula { get; set; }
     }
 }
