@@ -1,15 +1,15 @@
 ﻿@using Teacher_Control.BLL;
 @using Teacher_Control.Models;
-@page "/Asignaturas"
-@page "/Asignaturas/{AsignaturaId:int}"
+@page "/Semestres"
+@page "/Semestres/{SemestreId:int}"
 
 
 
-<EditForm Model="asignaturas" OnValidSubmit="Guardar">
+<EditForm Model="semestres" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
     <div class="card">
         <div class="card-header">
-            <h3>Registro de Asignatura</h3>
+            <h3>Registro del Semestres</h3>
         </div>
 
         <div class="card-body">
@@ -18,9 +18,9 @@
                 <div class="form-row align-items-center">
                     <div class="col">
                         <div class="form-group">
-                            <label>Asignatura Id</label>
+                            <label>Semestres Id</label>
                             <div class="input-group">
-                                <InputNumber @bind-Value="asignaturas.AsignaturaId" class="form-control" />
+                                <InputNumber @bind-Value="semestres.SemestreId" class="form-control" />
                                 <div class="input-group-append ml-2">
                                     <button type="button" style="z-index:0" class="btn btn-secondary input-group-text" @onclick="Buscar">Buscar</button>
                                 </div>
@@ -31,11 +31,11 @@
 
                 <div class="form-group">
                     <label>Nombres</label>
-                    <InputText @bind-Value="asignaturas.Descripcion" class="form-control" />
-                    <ValidationMessage For="@(() => asignaturas.Descripcion)" />
+                    <InputText @bind-Value="semestres.Descripcion" class="form-control" />
+                    <ValidationMessage For="@(() => semestres.Descripcion)" />
                 </div>
 
-               
+
 
             </form>
         </div>
@@ -55,12 +55,12 @@
     string Mensaje = string.Empty;
 
     [Inject]
-    private AsignaturasBLL asignaturasBLL { get; set; }
+    private SemestresBLL semestresBLL { get; set; }
 
     [Parameter]
-    public int AsignaturaId { get; set; }
+    public int SemestreId { get; set; }
 
-    Asignaturas asignaturas = new Asignaturas();
+    Semestres semestres = new Semestres();
 
     protected override void OnInitialized()
     {
@@ -69,11 +69,11 @@
 
     public async void Buscar()
     {
-        var registro = await asignaturasBLL.Buscar(asignaturas.AsignaturaId);
+        var registro = await semestresBLL.Buscar(semestres.SemestreId);
 
         if (registro != null)
         {
-            this.asignaturas = registro;
+            this.semestres = registro;
 
         }
         else
@@ -90,7 +90,7 @@
     public async void Guardar()
     {
 
-        if (await asignaturasBLL.Guardar(asignaturas))
+        if (await semestresBLL.Guardar(semestres))
         {
 
             Mensaje = ("Guardado");
@@ -106,7 +106,7 @@
 
     public async void Eliminar()
     {
-        if (await asignaturasBLL.Eliminar(asignaturas.AsignaturaId))
+        if (await semestresBLL.Eliminar(semestres.SemestreId))
         {
             Mensaje = ("Eliminado");
             Limpiar();
@@ -120,8 +120,8 @@
 
     public void Limpiar()
     {
-        this.asignaturas = new Asignaturas();
+        this.semestres = new Semestres();
     }
 
 
-}
+}}
