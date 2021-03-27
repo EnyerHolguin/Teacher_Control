@@ -78,17 +78,15 @@ namespace Teacher_Control.BLL
             return ok;
         }
 
+
         public async Task<Estudiantes> Buscar(int id)
         {
             Estudiantes estudiantes;
 
             try
             {
-                estudiantes = await _contexto.Estudiante.Where(e => e.EstudianteId == id).AsNoTracking().SingleOrDefaultAsync();
 
-                var aux = _contexto.Set<Estudiantes>().Local.SingleOrDefault(e => e.EstudianteId == id);
-                if (aux != null)
-                    _contexto.Entry(aux).State = EntityState.Detached;
+                estudiantes = await _contexto.Estudiante.FindAsync(id);
             }
             catch (Exception)
             {

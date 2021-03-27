@@ -1,3 +1,4 @@
+using Blazored.Toast;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
@@ -55,7 +56,8 @@ namespace Teacher_Control
 
             });
 
-           
+            //
+            services.AddBlazoredToast();
 
             //Adding BLL Injections
             services.AddTransient<AsignaturasBLL>();
