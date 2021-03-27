@@ -120,7 +120,7 @@ namespace Teacher_Control.BLL
             return ok;
         }
 
-        public async Task<List<Inscripcion>> GetHabilidades(Expression<Func<Inscripcion, bool>> criterio)
+        public async Task<List<Inscripcion>> GetInscripcion(Expression<Func<Inscripcion, bool>> criterio)
         {
             List<Inscripcion> lista = new List<Inscripcion>();
 

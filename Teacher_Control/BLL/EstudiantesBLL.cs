@@ -118,7 +118,7 @@ namespace Teacher_Control.BLL
             return ok;
         }
 
-        public async Task<List<Estudiantes>> GetHabilidades(Expression<Func<Estudiantes, bool>> criterio)
+        public async Task<List<Estudiantes>> GetEstudiantes(Expression<Func<Estudiantes, bool>> criterio)
         {
             List<Estudiantes> lista = new List<Estudiantes>();
 
