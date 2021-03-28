@@ -1,0 +1,199 @@
+﻿@page "/Inscripcion"
+@page "/Inscripcion/{IncripcionId:int}"
+
+@inject IToastService toast
+
+<div class="shadow-lg p-3 mb-5 bg-white rounded">
+
+    <EditForm Model="inscripcion" OnValidSubmit="Guardar">
+        <DataAnnotationsValidator />
+        <div class="card">
+
+            <div class="card-header">
+                <h3>Registro de Cobro</h3>
+            </div>
+
+            <div class="card-body">
+                <form>
+                    <div class="form-row align-items-center">
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Id</label>
+                                <div class="input-group">
+                                    <InputNumber @bind-Value="inscripcion.IncripcionId" class="form-control" />
+                                    <div class="input-group-append">
+                                        <button type="button" style="z-index:0" class="btn btn-secondary" @onclick="Buscar">Buscar</button>
+                                    </div>
+                                    <ValidationMessage For="@(() => inscripcion.IncripcionId)" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @*Fecha*@
+                    <div class="form-group">
+                        <label>Fecha</label>
+                        <InputDate @bind-Value="inscripcion.Fecha" class="form-control" />
+                        <ValidationMessage For="@(() => inscripcion.Fecha)" />
+                    </div>
+
+                </form>
+
+                @*Cliente*@
+                <div class="form-group">
+                    <label>Clientes</label>
+                    <select value="@inscripcion.EstudianteId" class="form-control" @onchange="BuscarEstudiantes">
+                        <option value="0" disabled selected>Seleccione un cliente</option>
+                        @foreach (var item in listestud)
+                        {
+                            <option value="@item.EstudianteId">@item.Nombres@item.Apellidos</option>
+                        }
+                    </select>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive text-nowrap" style="position: relative; height:200px; overflow: auto; display: block;">
+                    <table class="table table-striped">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Fecha</th>
+                                <th>Monto</th>
+                                <th>Balance</th>
+                                <th>Cobrado</th>
+                                <th>Pagar</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white">
+
+                            
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+          
+
+            <div class="card-footer">
+                <div class="form-group text-center">
+                    <div class="form-group text-center">
+                        <button type="button" class="btn btn-primary" @onclick="Nuevo">Nuevo</button>
+                        <button type="submit" class="btn btn-success">Guardar</button>
+                        <button type="button" class="btn btn-danger" @onclick="Eliminar">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </EditForm>
+
+</div>
+
+
+@code {
+    string Mensaje = string.Empty;
+
+    [Inject]
+    private InscripcionBLL inscripcionBLL { get; set; }
+
+    [Inject]
+    private EstudiantesBLL estudiantesBLL { get; set; }
+
+    [Inject]
+    private SemestresBLL semestresBLL { get; set; }
+
+    [Inject]
+    private AsignaturasBLL asignaturasBLL { get; set; }
+
+    [Parameter]
+    public int IncripcionId { get; set; }
+    private Inscripcion inscripcion = new Inscripcion();
+    private Estudiantes estudiantes = new Estudiantes();
+    private Semestres semestres = new Semestres();
+    private Asignaturas asignaturas = new Asignaturas();
+
+    List<Estudiantes> listestud = new List<Estudiantes>();
+
+    //Inscripcion inscripcion = new Inscripcion();
+
+    protected override void OnInitialized()
+    {
+        Nuevo();
+    }
+
+    public async void Buscar()
+    {
+        var registro = await inscripcionBLL.Buscar(inscripcion.IncripcionId);
+
+        if (registro != null)
+        {
+            this.inscripcion = registro;
+
+        }
+        else
+        {
+            Mensaje = ("pudo ser encontrado el registro.");
+        }
+    }
+
+
+    private async Task BuscarEstudiantes(ChangeEventArgs arg)
+    {
+
+        listestud = await estudiantesBLL.Getlist(e => e.EstudianteId == inscripcion.EstudianteId);
+
+        inscripcion.EstudianteId = int.Parse(arg.Value.ToString());
+
+        /*if (inscripcion.CobroId >= 0)
+            inscripcion.cobrosDetalles = await estudiantesBLL.GetVentasPorPagar(inscripcion.ClienteId);*/
+
+    }
+
+
+
+    public void Nuevo()
+    {
+        Limpiar();
+    }
+
+    public async void Guardar()
+    {
+
+        if (await inscripcionBLL.Guardar(inscripcion))
+        {
+
+            Mensaje = ("Guardado");
+            Limpiar();
+
+        }
+        else
+        {
+            Mensaje = ("No se ser guardado  el registro.");
+
+        }
+    }
+
+    public async void Eliminar()
+    {
+        if (await inscripcionBLL.Eliminar(inscripcion.IncripcionId))
+        {
+            Mensaje = ("Eliminado");
+            Limpiar();
+        }
+        else
+        {
+            Mensaje = ("No se logró eliminar el registro.");
+
+        }
+    }
+
+    public void Limpiar()
+    {
+        this.inscripcion = new Inscripcion();
+    }
+}

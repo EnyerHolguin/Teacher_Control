@@ -118,7 +118,24 @@ namespace Teacher_Control.BLL
             return ok;
         }
 
-        public async Task<List<Estudiantes>> GetEstudiantes(Expression<Func<Estudiantes, bool>> criterio)
+        public async Task<List<Estudiantes>> GetEstudiantes()
+        {
+            List<Estudiantes> lista = new List<Estudiantes>();
+
+            try
+            {
+                lista = await _contexto.Estudiante.ToListAsync();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            return lista;
+        }
+
+        public async Task<List<Estudiantes>> Getlist(Expression<Func<Estudiantes, bool>> criterio)
         {
             List<Estudiantes> lista = new List<Estudiantes>();
 

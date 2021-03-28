@@ -121,14 +121,14 @@
         switch (Filtro)
         {
             case "0": //Todo
-                CobroList = await estudiantesBLL.GetEstudiantes(c => true);
+                CobroList = await estudiantesBLL.Getlist(c => true);
                 break;
             case "1":
                 if (Criterio.Trim().Length > 0)
                 {
                     try
                     {
-                        CobroList = await estudiantesBLL.GetEstudiantes(c => c.EstudianteId == id);
+                        CobroList = await estudiantesBLL.Getlist(c => c.EstudianteId == id);
                     }
                     catch (FormatException)
                     {
