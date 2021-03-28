@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace Teacher_Control.Models
 {
-    public class Asignaturas
+    public class InscripcionDetalle
     {
         [Key]
+        public int Id { get; set; }
+        public int IncripcionId { get; set; } 
+        public int EstudianteId { get; set; }
         public int AsignaturaId { get; set; }
-        [Required(ErrorMessage = "Es obligatorio introducir una Descripcion .")]
-        public string Descripcion { get; set; }
+        public int SemestreId { get; set; }
     }
 }

@@ -10,6 +10,7 @@ namespace Teacher_Control.Models
     {
         [Key]
         public int SemestreId { get; set; }
+        [Required(ErrorMessage = "Es obligatorio introducir una Descripcion .")]
         public string Descripcion { get; set; }
     }
 }
