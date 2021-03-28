@@ -1,9 +1,7 @@
-﻿@using Teacher_Control.BLL;
-@using Teacher_Control.Models;
-@page "/Asignaturas"
+﻿@page "/Asignaturas"
 @page "/Asignaturas/{AsignaturaId:int}"
 
-
+@inject IToastService toast
 
 <EditForm Model="asignaturas" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
@@ -80,7 +78,8 @@
         }
         else
         {
-            Mensaje = ("pudo ser encontrado el registro.");
+            toast.ShowInfo("No pudo ser encontrado el registro.");
+            // Mensaje = ("pudo ser encontrado el registro.");
         }
     }
 

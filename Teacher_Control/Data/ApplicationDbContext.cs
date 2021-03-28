@@ -22,14 +22,18 @@ namespace Teacher_Control.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
+
+            /*if (!optionsBuilder.IsConfigured)
             {
 
                // optionsBuilder.UseSqlServer("Server=proyectofinalap2.database.windows.net;Database=Teacher_control;User ID=Teacher_Control;Password=intern@Aplicada2;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
-            }
+            }*/
+        }
 
-
-
-        }   
+        /*protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Asignaturas>().HasData(new Asignaturas() { AsignaturaId = 1, Descripcion = "Aplicada I" });
+            modelBuilder.Entity<Asignaturas>().HasData(new Asignaturas() { AsignaturaId = 2, Descripcion = "Aplicada II" });
+        }*/
     }
 }

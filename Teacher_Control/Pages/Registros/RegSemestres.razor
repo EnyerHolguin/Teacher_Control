@@ -1,9 +1,7 @@
-﻿@using Teacher_Control.BLL;
-@using Teacher_Control.Models;
-@page "/Semestres"
+﻿@page "/Semestres"
 @page "/Semestres/{SemestreId:int}"
 
-
+@inject IToastService toast
 
 <EditForm Model="semestres" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
@@ -78,7 +76,8 @@
         }
         else
         {
-            Mensaje = (" no pudo ser encontrado el registro.");
+            toast.ShowInfo("No pudo ser encontrado el registro.");
+            //Mensaje = (" no pudo ser encontrado el registro.");
         }
     }
 
@@ -93,27 +92,32 @@
         if (await semestresBLL.Guardar(semestres))
         {
 
-            Mensaje = ("Guardado");
+            //Mensaje = ("Guardado");
+            toast.ShowSuccess("Guardado.");
             Limpiar();
 
         }
         else
         {
-            Mensaje = ("No se ser guardado  el registro.");
+            // Mensaje = ("No se ser guardado  el registro.");
+            toast.ShowError("Error al guardar el registro.");
 
         }
     }
 
     public async void Eliminar()
     {
+        this.SemestreId = semestres.SemestreId;
         if (await semestresBLL.Eliminar(semestres.SemestreId))
         {
-            Mensaje = ("Eliminado");
+            //Mensaje = ("Eliminado");
+            toast.ShowSuccess("Eliminado");
             Limpiar();
         }
         else
         {
-            Mensaje = ("No se logró eliminar el registro.");
+            //Mensaje = ("No se logró eliminar el registro.");
+            toast.ShowError("Error al eliminar el registro.");
 
         }
     }
@@ -124,4 +128,4 @@
     }
 
 
-}}
+}

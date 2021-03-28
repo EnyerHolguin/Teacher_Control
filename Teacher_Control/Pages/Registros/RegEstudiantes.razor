@@ -123,6 +123,7 @@
     public async void Guardar()
     {
 
+        this.EstudianteId = estudiantes.EstudianteId;
         if (await estudiantesBLL.Guardar(estudiantes))
         {
 
@@ -141,6 +142,7 @@
 
     public async void Eliminar()
     {
+        this.EstudianteId = estudiantes.EstudianteId;
         if (await estudiantesBLL.Eliminar(estudiantes.EstudianteId))
         {
             //Mensaje = ("Eliminado");
