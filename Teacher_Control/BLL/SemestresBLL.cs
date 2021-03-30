@@ -117,5 +117,41 @@ namespace Teacher_Control.BLL
 
             return ok;
         }
+
+        public async Task<List<Semestres>> Getsemestres()
+        {
+            List<Semestres> lista = new List<Semestres>();
+
+            try
+            {
+                lista = await _contexto.Semestre.ToListAsync();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            return lista;
+        }
+
+        public async Task<List<Semestres>> Getlist(Expression<Func<Semestres, bool>> criterio)
+        {
+            List<Semestres> lista = new List<Semestres>();
+
+            try
+            {
+                lista = await _contexto.Semestre.Where(criterio).ToListAsync();
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            return lista;
+        }
+
     }
 }

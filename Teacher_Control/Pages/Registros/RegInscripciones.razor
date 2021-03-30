@@ -39,14 +39,38 @@
 
                 </form>
 
-                @*Cliente*@
+                @*Estudiantes*@
                 <div class="form-group">
-                    <label>Clientes</label>
+                    <label>Estudiantes</label>
                     <select value="@inscripcion.EstudianteId" class="form-control" @onchange="BuscarEstudiantes">
-                        <option value="0" disabled selected>Seleccione un cliente</option>
+                        <option value="0" disabled selected>Seleccione un estudiante</option>
                         @foreach (var item in listestud)
                         {
-                            <option value="@item.EstudianteId">@item.Nombres@item.Apellidos</option>
+                            <option value="@item.EstudianteId">@item.Nombres</option>
+                        }
+                    </select>
+                </div>
+
+                @*Asignatura*@
+                <div class="form-group">
+                    <label>Asignatura</label>
+                    <select value="@inscripcion.AsignaturaId" class="form-control" @onchange="BuscarAsignatura">
+                        <option value="0" disabled selected>Seleccione una asignatura</option>
+                        @foreach (var item in listAsignat)
+                        {
+                            <option value="@item.AsignaturaId">@item.Descripcion</option>
+                        }
+                    </select>
+                </div>
+
+                @*Semestres*@
+                <div class="form-group">
+                    <label>Semestres</label>
+                    <select value="@inscripcion.SemestreId" class="form-control" @onchange="BuscarAsignatura">
+                        <option value="0" disabled selected>Seleccione el semestres</option>
+                        @foreach (var item in listSemestres)
+                        {
+                            <option value="@item.SemestreId">@item.Descripcion</option>
                         }
                     </select>
                 </div>
@@ -55,29 +79,6 @@
         </div>
 
         <div class="card">
-            <div class="card-body">
-                <div class="table-responsive text-nowrap" style="position: relative; height:200px; overflow: auto; display: block;">
-                    <table class="table table-striped">
-                        <thead class="thead-light">
-                            <tr>
-                                <th>ID</th>
-                                <th>Fecha</th>
-                                <th>Monto</th>
-                                <th>Balance</th>
-                                <th>Cobrado</th>
-                                <th>Pagar</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white">
-
-                            
-                        </tbody>
-                    </table>
-                </div>
-
-            </div>
-
-          
 
             <div class="card-footer">
                 <div class="form-group text-center">
@@ -118,6 +119,8 @@
     private Asignaturas asignaturas = new Asignaturas();
 
     List<Estudiantes> listestud = new List<Estudiantes>();
+    List<Asignaturas> listAsignat = new List<Asignaturas>();
+    List<Semestres> listSemestres = new List<Semestres>();
 
     //Inscripcion inscripcion = new Inscripcion();
 
@@ -147,12 +150,25 @@
 
         listestud = await estudiantesBLL.Getlist(e => e.EstudianteId == inscripcion.EstudianteId);
 
-        inscripcion.EstudianteId = int.Parse(arg.Value.ToString());
+        /* inscripcion.EstudianteId = int.Parse(arg.Value.ToString());
 
-        /*if (inscripcion.CobroId >= 0)
-            inscripcion.cobrosDetalles = await estudiantesBLL.GetVentasPorPagar(inscripcion.ClienteId);*/
+         if (inscripcion.IncripcionId >= 0)
+             inscripcion.InscripcionDetalles = await estudiantesBLL.Getlist(inscripcion.EstudianteId);*/
 
     }
+
+    private async Task BuscarAsignatura()
+    {
+
+        listAsignat = await asignaturasBLL.GetList(v => v.AsignaturaId == inscripcion.AsignaturaId);
+    }
+
+    private async Task BuscarSemestres()
+    {
+
+        listSemestres = await semestresBLL.Getlist(v => v.SemestreId == inscripcion.SemestreId);
+    }
+
 
 
 

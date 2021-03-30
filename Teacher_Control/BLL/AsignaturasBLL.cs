@@ -84,11 +84,12 @@ namespace Teacher_Control.BLL
 
             try
             {
-                asignaturas = await _contexto.Asignatura.Where(a => a.AsignaturaId == id).AsNoTracking().SingleOrDefaultAsync();
+                asignaturas = await _contexto.Asignatura.
+                    Where(a => a.AsignaturaId == id).
+                    AsNoTracking().
+                    SingleOrDefaultAsync();
 
-                var aux = _contexto.Set<Asignaturas>().Local.SingleOrDefault(a => a.AsignaturaId == id);
-                if (aux != null)
-                    _contexto.Entry(aux).State = EntityState.Detached;
+             
             }
             catch (Exception)
             {
@@ -120,14 +121,31 @@ namespace Teacher_Control.BLL
             return ok;
         }
 
-        public async Task<List<Asignaturas>> GetAsignaturas(Expression<Func<Asignaturas, bool>> criterio)
+        public async Task<List<Asignaturas>> GetAsignaturas()
+        {
+            List<Asignaturas> lista = new List<Asignaturas>();
+
+            try
+            {
+                lista = await _contexto.Asignatura.ToListAsync();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            return lista;
+        }
+
+        public async Task<List<Asignaturas>> GetList(Expression<Func<Asignaturas, bool>> criterio)
         {
             List<Asignaturas> lista = new List<Asignaturas>();
 
             try
             {
                 lista = await _contexto.Asignatura.Where(criterio).ToListAsync();
-                lista.Sort((x, y) => x.Descripcion.CompareTo(y.Descripcion));
+               
             }
             catch (Exception)
             {

@@ -11,7 +11,7 @@ namespace Teacher_Control.Models
     {
         [Key]
         public int IncripcionId { get; set; }
-        public DateTime Fecha { get; set; } = DateTime.Now;
+        public DateTime Fecha { get; set; }
         public int SemestreId { get; set; }
         public int AsignaturaId { get; set; }
         public int EstudianteId { get; set; }
