@@ -10,7 +10,7 @@
         <div class="card">
 
             <div class="card-header">
-                <h3>Registro de Cobro</h3>
+                <h3>Registro de Inscripcion</h3>
             </div>
 
             <div class="card-body">
@@ -44,19 +44,20 @@
             <div class="form-group">
                 <label>Estudiantes</label>
                 <InputSelect @bind-Value="inscripcion.EstudianteId" class="form-control">
-
+                    <option value="0" disabled selected>Seleccione un estudiante</option>
                     @foreach (var item in listestud)
                     {
                         <option value="@item.EstudianteId">@item.Nombres</option>
                     }
 
                 </InputSelect>
+                <ValidationMessage For="(() => inscripcion.EstudianteId)" />
             </div>
 
 
                 <div class="form-group">
                     <label>Estudiantes</label>
-                    <InputSelect @bind-Value="inscripcion.EstudianteId" class="form-control" @onchange="BuscarEstudiantes">
+                    <InputSelect @bind-Value="inscripcion.EstudianteId" class="form-control">
                         <option value="0" disabled selected>Seleccione un estudiante</option>
                         @foreach (var item in listestud)
                         {
@@ -69,7 +70,7 @@
                 @*Asignatura*@
                 <div class="form-group">
                     <label>Asignatura</label>
-                    <InputSelect @bind-Value="inscripcion.AsignaturaId" class="form-control" @onchange="BuscarAsignatura">
+                    <InputSelect @bind-Value="inscripcion.AsignaturaId" class="form-control">
                         <option value="0" disabled selected>Seleccione una asignatura</option>
                         @foreach (var item in listAsignat)
                         {
@@ -81,7 +82,7 @@
                 @*Semestres*@
                 <div class="form-group">
                     <label>Semestres</label>
-                    <select value="@inscripcion.SemestreId" class="form-control" @onchange="BuscarAsignatura">
+                    <select value="@inscripcion.SemestreId" class="form-control">
                         <option value="0" disabled selected>Seleccione el semestres</option>
                         @foreach (var item in listSemestres)
                         {
@@ -112,7 +113,6 @@
 
 
 @code {
-    string Mensaje = string.Empty;
 
     [Inject]
     private InscripcionBLL inscripcionBLL { get; set; }
@@ -133,14 +133,18 @@
     private Semestres semestres = new Semestres();
     private Asignaturas asignaturas = new Asignaturas();
 
-    private List<Estudiantes> listestud = new List<Estudiantes>();
+    List<Estudiantes> listestud = new List<Estudiantes>();
     List<Asignaturas> listAsignat = new List<Asignaturas>();
     List<Semestres> listSemestres = new List<Semestres>();
 
     //Inscripcion inscripcion = new Inscripcion();
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
+        listestud = await estudiantesBLL.Getlist(p => true);
+        listAsignat = await asignaturasBLL.GetList(p => true);
+        listSemestres = await semestresBLL.Getlist(p => true);
+
         Nuevo();
     }
 
@@ -155,33 +159,8 @@
         }
         else
         {
-            Mensaje = ("pudo ser encontrado el registro.");
+            toast.ShowInfo("pudo ser encontrado el registro.");
         }
-    }
-
-
-    private async Task BuscarEstudiantes(ChangeEventArgs arg)
-    {
-
-        listestud = await estudiantesBLL.Getlist(e => e.EstudianteId == inscripcion.EstudianteId);
-
-        /* inscripcion.EstudianteId = int.Parse(arg.Value.ToString());
-
-         if (inscripcion.IncripcionId >= 0)
-             inscripcion.InscripcionDetalles = await estudiantesBLL.Getlist(inscripcion.EstudianteId);*/
-
-    }
-
-    private async Task BuscarAsignatura()
-    {
-
-        listAsignat = await asignaturasBLL.GetList(v => v.AsignaturaId == inscripcion.AsignaturaId);
-    }
-
-    private async Task BuscarSemestres()
-    {
-
-        listSemestres = await semestresBLL.Getlist(v => v.SemestreId == inscripcion.SemestreId);
     }
 
 
@@ -198,13 +177,13 @@
         if (await inscripcionBLL.Guardar(inscripcion))
         {
 
-            Mensaje = ("Guardado");
+            toast.ShowInfo("Guardado");
             Limpiar();
 
         }
         else
         {
-            Mensaje = ("No se ser guardado  el registro.");
+            toast.ShowInfo("No se ser guardado  el registro.");
 
         }
     }
@@ -213,12 +192,12 @@
     {
         if (await inscripcionBLL.Eliminar(inscripcion.IncripcionId))
         {
-            Mensaje = ("Eliminado");
+            toast.ShowInfo("Eliminado");
             Limpiar();
         }
         else
         {
-            Mensaje = ("No se logró eliminar el registro.");
+            toast.ShowInfo("No se logró eliminar el registro.");
 
         }
     }

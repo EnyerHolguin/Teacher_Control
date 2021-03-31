@@ -85,8 +85,11 @@ namespace Teacher_Control.BLL
 
             try
             {
+                estudiantes = await _contexto.Estudiante.Where(i => i.EstudianteId == id).AsNoTracking().SingleOrDefaultAsync();
 
-                estudiantes = await _contexto.Estudiante.FindAsync(id);
+                var aux = _contexto.Set<Estudiantes>().Local.SingleOrDefault(h => h.EstudianteId == id);
+                if (aux != null)
+                    _contexto.Entry(aux).State = EntityState.Detached;
             }
             catch (Exception)
             {
