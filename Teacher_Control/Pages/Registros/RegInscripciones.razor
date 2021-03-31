@@ -20,7 +20,7 @@
                             <div class="form-group">
                                 <label>Id</label>
                                 <div class="input-group">
-                                    <InputNumber @bind-Value="inscripcion.IncripcionId" class="form-control" />
+                                    <InputNumber @bind-Value="this.IncripcionId" class="form-control" />
                                     <div class="input-group-append">
                                         <button type="button" style="z-index:0" class="btn btn-secondary" @onclick="Buscar">Buscar</button>
                                     </div>
@@ -40,6 +40,7 @@
                 </form>
 
                 @*Estudiantes*@
+
             <div class="form-group">
                 <label>Estudiantes</label>
                 <InputSelect @bind-Value="inscripcion.EstudianteId" class="form-control">
@@ -52,16 +53,28 @@
                 </InputSelect>
             </div>
 
+                <div class="form-group">
+                    <label>Estudiantes</label>
+                    <InputSelect @bind-Value="inscripcion.EstudianteId" class="form-control" @onchange="BuscarEstudiantes">
+                        <option value="0" disabled selected>Seleccione un estudiante</option>
+                        @foreach (var item in listestud)
+                        {
+                            <option value="@item.EstudianteId">@item.Nombres</option>
+                        }
+                    </InputSelect>
+                </div>
+
+
                 @*Asignatura*@
                 <div class="form-group">
                     <label>Asignatura</label>
-                    <select value="@inscripcion.AsignaturaId" class="form-control" @onchange="BuscarAsignatura">
+                    <InputSelect @bind-Value="inscripcion.AsignaturaId" class="form-control" @onchange="BuscarAsignatura">
                         <option value="0" disabled selected>Seleccione una asignatura</option>
                         @foreach (var item in listAsignat)
                         {
                             <option value="@item.AsignaturaId">@item.Descripcion</option>
                         }
-                    </select>
+                    </InputSelect>
                 </div>
 
                 @*Semestres*@
