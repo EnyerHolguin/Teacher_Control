@@ -27,7 +27,7 @@
                                     <ValidationMessage For="@(() => inscripcion.IncripcionId)" />
                                 </div>
                             </div>
-                        </div
+                        </div>
                     </div>
 
                     @*Fecha*@
@@ -54,42 +54,30 @@
                 <ValidationMessage For="(() => inscripcion.EstudianteId)" />
             </div>
 
-
-                <div class="form-group">
-                    <label>Estudiantes</label>
-                    <InputSelect @bind-Value="inscripcion.EstudianteId" class="form-control">
-                        <option value="0" disabled selected>Seleccione un estudiante</option>
-                        @foreach (var item in listestud)
-                        {
-                            <option value="@item.EstudianteId">@item.Nombres</option>
-                        }
-                    </InputSelect>
-                </div>
-
-
                 @*Asignatura*@
-                <div class="form-group">
-                    <label>Asignatura</label>
-                    <InputSelect @bind-Value="inscripcion.AsignaturaId" class="form-control">
-                        <option value="0" disabled selected>Seleccione una asignatura</option>
-                        @foreach (var item in listAsignat)
-                        {
-                            <option value="@item.AsignaturaId">@item.Descripcion</option>
-                        }
-                    </InputSelect>
+            <div class="form-group">
+                <label>Asignatura</label>
+                <InputSelect @bind-Value="inscripcion.AsignaturaId" class="form-control">
+                    <option value="0" disabled selected>Seleccione una asignatura</option>
+                    @foreach (var item in listAsignat)
+                    {
+                        <option value="@item.AsignaturaId">@item.Descripcion</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="(() => inscripcion.AsignaturaId)" />
                 </div>
 
                 @*Semestres*@
-                <div class="form-group">
+                <div class=" form-group">
                     <label>Semestres</label>
-                    <select value="@inscripcion.SemestreId" class="form-control">
+                    <InputSelect @bind-Value="inscripcion.SemestreId" class="form-control">
                         <option value="0" disabled selected>Seleccione el semestres</option>
                         @foreach (var item in listSemestres)
-                        {
-                            <option value="@item.SemestreId">@item.Descripcion</option>
-                        }
-                    </select>
-                </div>
+                      {
+                        <option value="@item.SemestreId">@item.Descripcion</option>
+                      }
+                    </InputSelect>
+            </div>
 
             </div>
         </div>
@@ -137,14 +125,11 @@
     List<Asignaturas> listAsignat = new List<Asignaturas>();
     List<Semestres> listSemestres = new List<Semestres>();
 
-    //Inscripcion inscripcion = new Inscripcion();
-
     protected override async Task OnInitializedAsync()
     {
         listestud = await estudiantesBLL.Getlist(p => true);
         listAsignat = await asignaturasBLL.GetList(p => true);
         listSemestres = await semestresBLL.Getlist(p => true);
-
         Nuevo();
     }
 
