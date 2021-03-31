@@ -19,7 +19,7 @@
                         <div class="form-group">
                             <label>Estudiante Id</label>
                             <div class="input-group">
-                                <InputNumber @bind-Value="estudiantes.EstudianteId" class="form-control" />
+                                <InputNumber @bind-Value="this.EstudianteId" class="form-control" />
                                 <div class="input-group-append ml-2">
                                     <button type="button" style="z-index:0" class="btn btn-secondary input-group-text" @onclick="Buscar">Buscar</button>
                                 </div>
@@ -102,7 +102,7 @@
 
     public async void Buscar()
     {
-        var registro = await estudiantesBLL.Buscar(estudiantes.EstudianteId);
+        var registro = await estudiantesBLL.Buscar(this.EstudianteId);
 
         if (registro != null)
         {
@@ -124,7 +124,7 @@
     public async void Guardar()
     {
 
-        this.EstudianteId = estudiantes.EstudianteId;
+        estudiantes.EstudianteId = this.EstudianteId;
         if (await estudiantesBLL.Guardar(estudiantes))
         {
 
@@ -143,8 +143,8 @@
 
     public async void Eliminar()
     {
-        this.EstudianteId = estudiantes.EstudianteId;
-        if (await estudiantesBLL.Eliminar(estudiantes.EstudianteId))
+        estudiantes.EstudianteId = this.EstudianteId;
+        if (await estudiantesBLL.Eliminar(this.EstudianteId))
         {
             //Mensaje = ("Eliminado");
             toast.ShowSuccess("Eliminado");
