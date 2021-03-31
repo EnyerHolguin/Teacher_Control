@@ -142,7 +142,8 @@ namespace Teacher_Control.BLL
             try
             {
                 lista = await _contexto.Estudiante.Where(criterio).ToListAsync();
-                
+                lista.Sort((x, y) => x.Nombres.CompareTo(y.Nombres));
+
             }
             catch (Exception)
             {
