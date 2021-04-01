@@ -41,6 +41,11 @@
                 </div>
 
                 <div class="form-group">
+                    <label>Seleccione una Imagen</label>
+                    <input type="file" class="form-control" id="Imagen" name="uploud" />
+                </div>
+
+                <div class="form-group">
                     <label>Teléfono</label>
                     <InputText @bind-Value="estudiantes.Telefono" class="form-control" />
                     <ValidationMessage For="@(() => estudiantes.Telefono)" />

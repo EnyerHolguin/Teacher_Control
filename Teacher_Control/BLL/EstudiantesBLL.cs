@@ -156,5 +156,11 @@ namespace Teacher_Control.BLL
 
             return lista;
         }
+
+        /*private void FO(object sender,EventArgs e)
+        {
+            openFileDialog1.InitialDiarecty=""
+        }*/
+
     }
 }

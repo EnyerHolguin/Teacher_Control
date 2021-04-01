@@ -22,6 +22,7 @@ namespace Teacher_Control.Models
         [Required(ErrorMessage = "Es obligatorio introducir una fecha de nacimiento")]
         public DateTime FechaNacimiento { get; set; } = DateTime.Now;
         public int Matricula { get; set; }
+        //public {get; set;}
 
         [ForeignKey("EstudianteId")]
         public virtual List<InscripcionDetalle> inscripcionDetalles { get; set; } = new List<InscripcionDetalle>();
