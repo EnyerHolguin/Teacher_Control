@@ -7,11 +7,13 @@
         <div class="col-xs-3">
             <button class="btn btn-primary" data-toggle="modal" data-target="#AddEditEmpModal" onclick="">
                 <i class="fa fa-user-plus"></i>
-                Add Employee
+                Inscribir estudiante
+                <a href="https://localhost:5001/Inscripcion"> </a>
+
             </button>
         </div>
         <div class="input-group col-md-4 offset-md-5">
-            <input type="text" class="form-control" placeholder="Search Employee" bind="" />
+            <input type="text" class="form-control" placeholder="Buscar estudiante" bind="" />
             <div class="input-group-append">
                 <button class="btn btn-info" onclick="">
                     <i class="fa fa-search"></i>
@@ -27,10 +29,10 @@ else
     <table class='table'>
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Gender</th>
-                <th>Designation</th>
-                <th>City</th>
+                <th>Nombres</th>
+                <th>Apellidos</th>
+                <th>Matricula</th>
+                <th>Nota</th>
             </tr>
         </thead>
         <tbody>
@@ -45,12 +47,12 @@ else
                         <button class="btn btn-outline-dark" data-toggle="modal" data-target="#AddEditEmpModal"
                                 onclick="">
                             <i class="fa fa-pencil-square-o"></i>
-                            Edit
+                            Editar
                         </button>
                         <button class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteEmpModal"
                                 onclick="">
                             <i class="fa fa-trash-o"></i>
-                            Delete
+                            Eliminar
                         </button>
                     </td>
                 </tr>
