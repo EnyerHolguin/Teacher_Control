@@ -1,5 +1,4 @@
-﻿@page "/Inscripcion"
-@page "/Inscripcion/{IncripcionId:int}"
+﻿@page "/Asistencia"
 
 @inject IToastService toast
 
@@ -10,7 +9,7 @@
         <div class="card">
 
             <div class="card-header">
-                <h3>Registro de Inscripcion</h3>
+                <h3>Registro de Asistencia</h3>
             </div>
 
             <div class="card-body">
@@ -39,32 +38,17 @@
 
                 </form>
 
-                @*Estudiantes*@
-
-            <div class="form-group">
-                <label>Estudiantes</label>
-                <InputSelect @bind-Value="inscripcion.EstudianteId" class="form-control">
-                    <option value="0" disabled selected>Seleccione un estudiante</option>
-                    @foreach (var item in listestud)
-                    {
-                        <option value="@item.EstudianteId">@item.Nombres @item.Apellidos @item.Matricula</option>
-                    }
-
-                </InputSelect>
-                <ValidationMessage For="(() => inscripcion.EstudianteId)" />
-            </div>
-
                 @*Asignatura*@
-            <div class="form-group">
-                <label>Asignatura</label>
-                <InputSelect @bind-Value="inscripcion.AsignaturaId" class="form-control">
-                    <option value="0" disabled selected>Seleccione una asignatura</option>
-                    @foreach (var item in listAsignat)
-                    {
-                        <option value="@item.AsignaturaId">@item.Descripcion</option>
-                    }
-                </InputSelect>
-                <ValidationMessage For="(() => inscripcion.AsignaturaId)" />
+                <div class="form-group">
+                    <label>Asignatura</label>
+                    <InputSelect @bind-Value="inscripcion.AsignaturaId" class="form-control">
+                        <option value="0" disabled selected>Seleccione una asignatura</option>
+                        @foreach (var item in listAsignat)
+                        {
+                            <option value="@item.AsignaturaId">@item.Descripcion</option>
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="(() => inscripcion.AsignaturaId)" />
                 </div>
 
                 @*Semestres*@
@@ -73,13 +57,42 @@
                     <InputSelect @bind-Value="inscripcion.SemestreId" class="form-control">
                         <option value="0" disabled selected>Seleccione el semestres</option>
                         @foreach (var item in listSemestres)
-                      {
-                        <option value="@item.SemestreId">@item.Descripcion</option>
-                      }
+                        {
+                            <option value="@item.SemestreId">@item.Descripcion</option>
+                        }
                     </InputSelect>
-            </div>
+                </div>
 
             </div>
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive text-nowrap" style="position: relative; height:200px; overflow: auto; display: block;">
+                <table class="table table-striped">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Foto</th>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Matricula</th>
+                            <th>Asistencia</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white">
+
+                        @foreach (var item in inscripcion.InscripcionDetalles)
+                        {
+                            <tr>
+                                <td>@item.EstudianteId</td>
+                                
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
         </div>
 
         <div class="card">
@@ -98,7 +111,6 @@
     </EditForm>
 
 </div>
-
 
 @code {
 
@@ -191,4 +203,5 @@
     {
         this.inscripcion = new Inscripcion();
     }
+
 }
