@@ -15,5 +15,9 @@ namespace Teacher_Control.Models
         public int AsignaturaId { get; set; }
         public int SemestreId { get; set; }
         public DateTime FechaI { get; set; } = DateTime.Now;
+        public virtual Estudiantes Estudiante { get; set; }
+        public virtual Asignaturas Asignatura { get; set; }
+        public virtual Semestres Semestre { get; set; }
+
     }
 }

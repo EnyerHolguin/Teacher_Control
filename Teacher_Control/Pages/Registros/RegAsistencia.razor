@@ -41,7 +41,7 @@
                 @*Asignatura*@
                 <div class="form-group">
                     <label>Asignatura</label>
-                    <InputSelect @bind-Value="inscripcion.AsignaturaId" class="form-control">
+                    <InputSelect @bind-Value="inscripcion.AsignaturaId" class="form-control" @onchange="BuscarET">
                         <option value="0" disabled selected>Seleccione una asignatura</option>
                         @foreach (var item in listAsignat)
                         {
@@ -71,7 +71,7 @@
                 <table class="table table-striped">
                     <thead class="thead-light">
                         <tr>
-                            <th>Foto</th>
+                            
                             <th>ID</th>
                             <th>Nombre</th>
                             <th>Apellido</th>
@@ -85,9 +85,9 @@
                         @foreach (var item in inscripcion.InscripcionDetalles)
                         {
                         <tr>
-                            <td>@item.EstudianteId</td>
-                            
-
+                            <td>@item.AsignaturaId</td>
+                            <td>@item.Estudiante.Nombres</td>
+                            <td>@item.Estudiante.Apellidos</td>
                         </tr>
                         }
                     </tbody>
@@ -137,6 +137,7 @@
     List<Estudiantes> listestud = new List<Estudiantes>();
     List<Asignaturas> listAsignat = new List<Asignaturas>();
     List<Semestres> listSemestres = new List<Semestres>();
+    List<Inscripcion> listIncrip = new List<Inscripcion>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -161,7 +162,17 @@
         }
     }
 
+    private async Task BuscarET(ChangeEventArgs arg)
+    {
 
+        listIncrip = await inscripcionBLL.GetInscripcion(v => v.AsignaturaId == inscripcion.AsignaturaId);
+
+       /* cobros.ClienteId = int.Parse(arg.Value.ToString());
+
+        if (cobros.CobroId >= 0)
+            cobros.cobrosDetalles = await ventasBLL.GetVentasPorPagar(cobros.ClienteId);*/
+
+    }
 
 
     public void Nuevo()

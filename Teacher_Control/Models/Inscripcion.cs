@@ -15,6 +15,9 @@ namespace Teacher_Control.Models
         public int SemestreId { get; set; }
         public int AsignaturaId { get; set; }
         public int EstudianteId { get; set; }
+        public virtual Estudiantes Estudiante { get; set; }
+        public virtual Semestres Semestre { get; set; }
+        public virtual Asignaturas Asignatura { get; set; }
 
         [ForeignKey("IncripcionId")]
         public virtual List<InscripcionDetalle> InscripcionDetalles { get; set; } = new List<InscripcionDetalle>();
