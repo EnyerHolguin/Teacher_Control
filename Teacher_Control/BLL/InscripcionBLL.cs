@@ -120,7 +120,25 @@ namespace Teacher_Control.BLL
             return ok;
         }
 
-        public async Task<List<Inscripcion>> GetInscripcion(Expression<Func<Inscripcion, bool>> criterio)
+        public async Task<List<Inscripcion>> GetInscripcion()
+        {
+            List<Inscripcion> lista = new List<Inscripcion>();
+
+            try
+            {
+                lista = await _contexto.Inscripcions.ToListAsync();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            return lista;
+        }
+
+
+        public async Task<List<Inscripcion>> GetList(Expression<Func<Inscripcion, bool>> criterio)
         {
             List<Inscripcion> lista = new List<Inscripcion>();
 

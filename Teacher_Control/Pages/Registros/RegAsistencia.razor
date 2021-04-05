@@ -41,28 +41,15 @@
                 @*Asignatura*@
                 <div class="form-group">
                     <label>Asignatura</label>
-                    <InputSelect @bind-Value="inscripcion.AsignaturaId" class="form-control" @onchange="BuscarET">
+                    <InputSelect @bind-Value="inscripcion.IncripcionId" class="form-control" @onchange="Consultar">
                         <option value="0" disabled selected>Seleccione una asignatura</option>
-                        @foreach (var item in listAsignat)
+                        @foreach (var item in listIncrip)
                         {
-                            <option value="@item.AsignaturaId">@item.Descripcion</option>
+                            <option value="@item.IncripcionId"></option>
                         }
                     </InputSelect>
-                    <ValidationMessage For="(() => inscripcion.AsignaturaId)" />
+                    <ValidationMessage For="(() => inscripcion.IncripcionId)" />
                 </div>
-
-                @*Semestres*@
-                <div class=" form-group">
-                    <label>Semestres</label>
-                    <InputSelect @bind-Value="inscripcion.SemestreId" class="form-control">
-                        <option value="0" disabled selected>Seleccione el semestres</option>
-                        @foreach (var item in listSemestres)
-                        {
-                            <option value="@item.SemestreId">@item.Descripcion</option>
-                        }
-                    </InputSelect>
-                </div>
-
             </div>
         </div>
 
@@ -71,10 +58,11 @@
                 <table class="table table-striped">
                     <thead class="thead-light">
                         <tr>
-                            
+                            <th>Asignaturas</th>
+                            <th>Semestres</th>
                             <th>ID</th>
-                            <th>Nombre</th>
-                            <th>Apellido</th>
+                            <th>Nombres</th>
+                            <th>Apellidos</th>
                             <th>Matricula</th>
                             <th>Asistencia</th>
                             <th></th>
@@ -82,12 +70,20 @@
                     </thead>
                     <tbody class="bg-white">
 
-                        @foreach (var item in inscripcion.InscripcionDetalles)
+                        @foreach (var item in listIncrip)
                         {
                         <tr>
-                            <td>@item.AsignaturaId</td>
+                            <td>@item.Asignatura.Descripcion</td>
+                            <td>@item.Semestre.Descripcion</td>
+                            <td>@item.EstudianteId</td>
                             <td>@item.Estudiante.Nombres</td>
                             <td>@item.Estudiante.Apellidos</td>
+                            <td>@item.Estudiante.Matricula</td>
+                            <select id="so" name="so">
+                                <option value="A">A</option>
+                                <option value="P">P</option>
+                                <option value="E">E</option>
+                            </select>
                         </tr>
                         }
                     </tbody>
@@ -141,9 +137,10 @@
 
     protected override async Task OnInitializedAsync()
     {
-        listestud = await estudiantesBLL.Getlist(p => true);
-        listAsignat = await asignaturasBLL.GetList(p => true);
-        listSemestres = await semestresBLL.Getlist(p => true);
+        listestud = await estudiantesBLL.GetEstudiantes();
+        listAsignat = await asignaturasBLL.GetAsignaturas();
+        listSemestres = await semestresBLL.Getsemestres();
+        listIncrip = await inscripcionBLL.GetInscripcion();
         Nuevo();
     }
 
@@ -162,15 +159,48 @@
         }
     }
 
-    private async Task BuscarET(ChangeEventArgs arg)
+    private async Task BuscarET()
     {
 
-        listIncrip = await inscripcionBLL.GetInscripcion(v => v.AsignaturaId == inscripcion.AsignaturaId);
+        listIncrip = await inscripcionBLL.GetList(v => v.AsignaturaId == inscripcion.AsignaturaId);
 
-       /* cobros.ClienteId = int.Parse(arg.Value.ToString());
+        /* cobros.ClienteId = int.Parse(arg.Value.ToString());
 
-        if (cobros.CobroId >= 0)
-            cobros.cobrosDetalles = await ventasBLL.GetVentasPorPagar(cobros.ClienteId);*/
+         if (cobros.CobroId >= 0)
+             cobros.cobrosDetalles = await ventasBLL.GetVentasPorPagar(cobros.ClienteId);*/
+
+    }
+
+
+    public string Filtro { get; set; }
+
+    public string Criterio { get; set; }
+
+    public async void Consultar()
+    {
+        int id;
+        int.TryParse(Criterio, out id);
+        //string.TryParse(Criterio, out observacion);
+        switch (Filtro)
+        {
+            case "0": //Todo
+                listIncrip = await inscripcionBLL.GetList(c => true);
+                break;
+            case "1":
+                if (Criterio.Trim().Length > 0)
+                {
+                    try
+                    {
+                        listIncrip = await inscripcionBLL.GetList(c => c.EstudianteId == id);
+                    }
+                    catch (FormatException)
+                    {
+                        toast.ShowWarning("Digite un Id");
+                    }
+                }
+                break;
+            
+        }
 
     }
 

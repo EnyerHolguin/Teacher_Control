@@ -126,14 +126,11 @@
             case "1":
                 if (Criterio.Trim().Length > 0)
                 {
-                    try
-                    {
-                        CobroList = await estudiantesBLL.Getlist(c => c.EstudianteId == id);
-                    }
-                    catch (FormatException)
-                    {
-                        toast.ShowWarning("Digite un Id");
-                    }
+                    CobroList = await estudiantesBLL.Getlist(c => c.EstudianteId == id);
+                }
+                else
+                {
+                    toast.ShowWarning("Digite un Id");
                 }
                 break;
             case "2":
