@@ -1,11 +1,11 @@
-﻿@page "/Consultar"
+﻿@page "/CInscripcion"
 @inject IToastService toast
 
 <div class="container shadow-lg p-3 rb-5 bg-white rounded col-md-16">
 
     <div class="card-img">
         <div class="card-header">
-            <h1>Consultas de Estudiantes</h1>
+            <h1>Consultas de Inscripcion</h1>
         </div>
 
         <div class="card-body">
@@ -33,7 +33,7 @@
                         <label>Filtro</label>
                         <select class="form-control" @bind="Filtro">
                             <option value="0">Todo</option>
-                            <option value="1">Estudiante Id</option>
+                            <option value="1">Inscripcion Id</option>
                             @*<option value="2">Observacion</option>*@
                         </select>
                     </div>
@@ -53,23 +53,23 @@
                     <table class="table table-striped">
                         <thead class="thead-light">
                             <tr>
-                                <th>Estudiante Id</th>
-                                <th>Fecha Nacimiento</th>
-                                <th>Matriculas</th>
+                                <th>Inscripcion Id</th>
+                                <th>Fecha</th>
+                                
                                 <th>Nombres</th>
                                 <th>Apellidos</th>
 
                             </tr>
                         </thead>
                         <tbody class="bg-white">
-                            @foreach (var item in EstudiantesList)
+                            @foreach (var item in InscripcionsList)
                             {
                                 <tr>
-                                    <td>@item.EstudianteId</td>
-                                    <td>@item.FechaNacimiento.ToString("dd/MM/yyyy")</td>
-                                    <td>@item.Matricula</td>
-                                    <td>@item.Nombres</td>
-                                    <td>@item.Apellidos</td>
+                                    <td>@item.IncripcionId</td>
+                                    <td>@item.Fecha.ToString("dd/MM/yyyy")</td>
+                                  
+                                    <td>@item.Estudiante.Nombres</td>
+                                    <td>@item.Estudiante.Apellidos</td>
                                 </tr>
                             }
                         </tbody>
@@ -88,9 +88,9 @@
 @code {
 
     [Inject]
-    public EstudiantesBLL estudiantesBLL { get; set; }
+    public InscripcionBLL inscripcionBLL { get; set; }
 
-    public List<Estudiantes> EstudiantesList { get; set; }
+    public List<Inscripcion> InscripcionsList { get; set; }
 
     private DateTime Desde { get; set; } = DateTime.Now;
     private DateTime Hasta { get; set; } = DateTime.Now;
@@ -108,7 +108,7 @@
 
     private void Nuevo()
     {
-        EstudiantesList = new List<Estudiantes>();
+        InscripcionsList = new List<Inscripcion>();
         Filtro = "0";
         Criterio = string.Empty;
     }
@@ -121,12 +121,12 @@
         switch (Filtro)
         {
             case "0": //Todo
-                EstudiantesList = await estudiantesBLL.Getlist(c => true);
+                InscripcionsList = await inscripcionBLL.GetList(c => true);
                 break;
             case "1":
                 if (Criterio.Trim().Length > 0)
                 {
-                    EstudiantesList = await estudiantesBLL.Getlist(c => c.EstudianteId == id);
+                    InscripcionsList = await inscripcionBLL.GetList(c => c.EstudianteId == id);
                 }
                 else
                 {
@@ -147,7 +147,7 @@
             case "0": //Nada
                 break;
             case "1": //Fecha
-                EstudiantesList = EstudiantesList.Where(s => s.FechaNacimiento >= Desde && s.FechaNacimiento <= Hasta).ToList();
+                InscripcionsList = InscripcionsList.Where(s => s.Fecha >= Desde && s.Fecha <= Hasta).ToList();
                 break;
 
         }
