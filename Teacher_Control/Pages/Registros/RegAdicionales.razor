@@ -1,0 +1,165 @@
+﻿@page "/Adicionales"
+@page "/Adicionales/{AdicionalesId:int}"
+
+@inject IToastService toast
+
+<div class="shadow-lg p-3 mb-5 bg-white rounded">
+
+    <EditForm Model="adicionales" OnValidSubmit="Guardar">
+        <DataAnnotationsValidator />
+        <div class="card">
+
+            <div class="card-header">
+                <h3>Registro de Punto Adicionales</h3>
+            </div>
+
+            <div class="card-body">
+                <form>
+                    <div class="form-row align-items-center">
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Adicionales ID</label>
+                                <div class="input-group">
+                                    <InputNumber @bind-Value="adicionales.AdicionalesId" class="form-control" />
+                                    <div class="input-group-append">
+                                        <button type="button" style="z-index:0" class="btn btn-secondary" @onclick="Buscar">Buscar</button>
+                                    </div>
+                                    <ValidationMessage For="@(() => adicionales.AdicionalesId)" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+
+                @*Estudiantes*@
+                <div class="form-group">
+                    <label>Estudiantes</label>
+                    <InputSelect @bind-Value="adicionales.EstudianteId" class="form-control">
+                        <option value="0" disabled selected>Seleccione un estudiante</option>
+                        @foreach (var item in listestud)
+                        {
+                            <option value="@item.EstudianteId">@item.Nombres @item.Apellidos @item.Matricula</option>
+                        }
+
+                    </InputSelect>
+                    <ValidationMessage For="(() => adicionales.EstudianteId)" />
+                </div>
+
+                <div class="form-group">
+                    <label>Descripcion</label>
+                    <InputText @bind-Value="adicionales.Descripcion" class="form-control" />
+                    <ValidationMessage For="@(() => adicionales.Descripcion)" />
+                </div>
+
+                <div class="form-group">
+                    <label>Puntos</label>
+                    <InputNumber @bind-Value="adicionales.Punto" class="form-control" />
+                    <ValidationMessage For="@(() => adicionales.Punto)" />
+                </div>
+
+
+            </div>
+        </div>
+
+        <div class="card">
+
+            <div class="card-footer">
+                <div class="form-group text-center">
+                    <div class="form-group text-center">
+                        <button type="button" class="btn btn-primary" @onclick="Nuevo">Nuevo</button>
+                        <button type="submit" class="btn btn-success">Guardar</button>
+                        <button type="button" class="btn btn-danger" @onclick="Eliminar">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </EditForm>
+
+</div>
+
+
+@code {
+
+    [Inject]
+    private AdicionalesBLL adicionalesBLL { get; set; }
+
+    [Inject]
+    private EstudiantesBLL estudiantesBLL { get; set; }
+
+ 
+
+    [Parameter]
+    public int AdicionalesId { get; set; }
+    private Adicionales adicionales = new Adicionales();
+    private Estudiantes estudiantes = new Estudiantes();
+  
+    List<Estudiantes> listestud = new List<Estudiantes>();
+   
+    protected override async Task OnInitializedAsync()
+    {
+        listestud = await estudiantesBLL.Getlist(p => true);
+        
+        Nuevo();
+    }
+
+    public async void Buscar()
+    {
+        var registro = await adicionalesBLL.Buscar(adicionales.AdicionalesId);
+
+        if (registro != null)
+        {
+            this.adicionales = registro;
+
+        }
+        else
+        {
+            toast.ShowInfo("pudo ser encontrado el registro.");
+        }
+    }
+
+
+
+
+    public void Nuevo()
+    {
+        Limpiar();
+    }
+
+    public async void Guardar()
+    {
+
+        if (await adicionalesBLL.Guardar(adicionales))
+        {
+
+            toast.ShowInfo("Guardado");
+            Limpiar();
+
+        }
+        else
+        {
+            toast.ShowInfo("No se ser guardado  el registro.");
+
+        }
+    }
+
+    public async void Eliminar()
+    {
+        if (await adicionalesBLL.Eliminar(adicionales.AdicionalesId))
+        {
+            toast.ShowInfo("Eliminado");
+            Limpiar();
+        }
+        else
+        {
+            toast.ShowInfo("No se logró eliminar el registro.");
+
+        }
+    }
+
+    public void Limpiar()
+    {
+        this.adicionales = new Adicionales();
+    }
+}

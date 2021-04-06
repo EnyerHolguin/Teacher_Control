@@ -64,6 +64,8 @@ namespace Teacher_Control
             services.AddTransient<EstudiantesBLL>();
             services.AddTransient<InscripcionBLL>();
             services.AddTransient<SemestresBLL>();
+            services.AddTransient<AdicionalesBLL>();
+
 
         }
 
