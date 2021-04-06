@@ -55,7 +55,7 @@
                             <tr>
                                 <th>Inscripcion Id</th>
                                 <th>Fecha</th>
-                                
+                                <th>Asignatura</th>
                                 <th>Nombres</th>
                                 <th>Apellidos</th>
 
@@ -67,7 +67,7 @@
                                 <tr>
                                     <td>@item.IncripcionId</td>
                                     <td>@item.Fecha.ToString("dd/MM/yyyy")</td>
-                                  
+                                    <td>@item.Asignatura.Descripcion</td>
                                     <td>@item.Estudiante.Nombres</td>
                                     <td>@item.Estudiante.Apellidos</td>
                                 </tr>
@@ -126,7 +126,7 @@
             case "1":
                 if (Criterio.Trim().Length > 0)
                 {
-                    InscripcionsList = await inscripcionBLL.GetList(c => c.EstudianteId == id);
+                    InscripcionsList = await inscripcionBLL.GetList(c => c.IncripcionId == id);
                 }
                 else
                 {
