@@ -358,6 +358,12 @@ namespace Teacher_Control.Data.Migrations
                     b.Property<int>("SemestreId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("TeacherControlTeacherId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TeacherId")
+                        .HasColumnType("int");
+
                     b.HasKey("IncripcionId");
 
                     b.HasIndex("AsignaturaId");
@@ -365,6 +371,8 @@ namespace Teacher_Control.Data.Migrations
                     b.HasIndex("EstudianteId");
 
                     b.HasIndex("SemestreId");
+
+                    b.HasIndex("TeacherControlTeacherId");
 
                     b.ToTable("Inscripcions");
                 });
@@ -558,11 +566,17 @@ namespace Teacher_Control.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Teacher_Control.Models.TeacherControl", "TeacherControl")
+                        .WithMany()
+                        .HasForeignKey("TeacherControlTeacherId");
+
                     b.Navigation("Asignatura");
 
                     b.Navigation("Estudiante");
 
                     b.Navigation("Semestre");
+
+                    b.Navigation("TeacherControl");
                 });
 
             modelBuilder.Entity("Teacher_Control.Models.InscripcionDetalle", b =>

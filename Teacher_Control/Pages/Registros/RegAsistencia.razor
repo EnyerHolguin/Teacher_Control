@@ -1,5 +1,6 @@
 ﻿@page "/Asistencia"
 @page "/Asistencia/{AsistenciaId:int}"
+
 @inject IToastService toast
 
 <div class="shadow-lg p-3 mb-5 bg-white rounded">
@@ -39,7 +40,7 @@
                 </form>
 
                 @*Asignatura*@
-                
+
             </div>
         </div>
 
@@ -61,18 +62,21 @@
                     </thead>
                     <tbody class="bg-white">
 
-                        @foreach (var item in AsistList)
+                        @foreach (var item in listIncrip)
                         {
-                            <tr>
-                                <td>@item.Asignatura.Descripcion</td>
-                                <td>@item.Semestre.Descripcion</td>
-                                <td>@item.EstudianteId</td>
-                                <td>@item.Estudiante.Nombres</td>
-                                <td>@item.Estudiante.Apellidos</td>
-                                <td>@item.Estudiante.Matricula</td>
-                                <td> <input type="checkbox" @onchange="CotejoCobrar" /> </td>
-                            </tr>
+                        <tr>
+                            <td>@item.Asignatura.Descripcion</td>
+                            <td>@item.Semestre.Descripcion</td>
+                            <td>@item.EstudianteId</td>
+                            <td>@item.Estudiante.Nombres</td>
+                            <td>@item.Estudiante.Apellidos</td>
+                            <td>@item.Estudiante.Matricula</td>
+                            <td> <input type="checkbox" @onchange="CotejoAsistencia" /> </td>
+                            <td> <input type="checkbox" @onchange="CotejoAsistencia" /> </td>
+                            <td> <input type="checkbox" @onchange="CotejoAsistencia" /> </td>
+                        </tr>
                         }
+
                     </tbody>
                 </table>
             </div>
@@ -133,16 +137,17 @@
         listAsignat = await asignaturasBLL.GetAsignaturas();
         listSemestres = await semestresBLL.Getsemestres();
         listIncrip = await inscripcionBLL.GetInscripcion();
+        
         Nuevo();
     }
 
     public async void Buscar()
     {
-        var registro = await inscripcionBLL.Buscar(inscripcion.IncripcionId);
+        var registro = await asistenciaBLL.Buscar(asistencia.AsistenciaId);
 
         if (registro != null)
         {
-            this.inscripcion = registro;
+            this.asistencia = registro;
 
         }
         else
@@ -151,92 +156,10 @@
         }
     }
 
-    private async Task BuscarET()
+    private async Task CotejoAsistencia(ChangeEventArgs arg)
     {
 
-        listIncrip = await inscripcionBLL.GetList(v => v.AsignaturaId == inscripcion.AsignaturaId);
-
-        /* cobros.ClienteId = int.Parse(arg.Value.ToString());
-
-         if (cobros.CobroId >= 0)
-             cobros.cobrosDetalles = await ventasBLL.GetVentasPorPagar(cobros.ClienteId);*/
-
-    }
-
-
-    private async Task CotejoCobrar(ChangeEventArgs arg)
-    {
-
-        AsistList = await asistenciaBLL.GetList(v => v.AsistenciaId == asistencia.EstudianteId);
-
-        asistencia.EstudianteId = int.Parse(arg.Value.ToString());
-
-        if (asistencia.P == false)
-        {
-            asistencia.ConteoP++;
-        }
-        if (asistencia.E == false)
-        {
-            asistencia.ConteoE++;
-        }
-        else
-        {
-            asistencia.ConteoA++;
-        }
-
-        /*if (cobros.CobroId >= 0)
-            cobros.cobrosDetalles = await ventasBLL.GetVentasPorPagar(cobros.ClienteId);*/
-
-    }
-
-
-    /*private void CotejoCobrar(Asistencia asistencia)
-    {
-        if (asistencia.P == false)
-        {
-            asistencia.ConteoP++;
-        }
-        if (asistencia.E == false)
-        {
-            asistencia.ConteoE++;
-        }
-        else
-        {
-            asistencia.ConteoA++;
-        }
-
-    }*/
-
-    public string Filtro { get; set; }
-
-    public string Criterio { get; set; }
-
-    public async void Consultar()
-    {
-        int id;
-        int.TryParse(Criterio, out id);
-        //string.TryParse(Criterio, out observacion);
-        switch (Filtro)
-        {
-            case "0": //Todo
-                listIncrip = await inscripcionBLL.GetList(c => true);
-                break;
-            case "1":
-                if (Criterio.Trim().Length > 0)
-                {
-                    try
-                    {
-                        listIncrip = await inscripcionBLL.GetList(c => c.EstudianteId == id);
-                    }
-                    catch (FormatException)
-                    {
-                        toast.ShowWarning("Digite un Id");
-                    }
-                }
-                break;
-
-        }
-
+        
     }
 
 
@@ -248,7 +171,7 @@
     public async void Guardar()
     {
 
-        if (await inscripcionBLL.Guardar(inscripcion))
+        if (await asistenciaBLL.Guardar(asistencia))
         {
 
             toast.ShowInfo("Guardado");
@@ -264,7 +187,7 @@
 
     public async void Eliminar()
     {
-        if (await inscripcionBLL.Eliminar(inscripcion.IncripcionId))
+        if (await asistenciaBLL.Eliminar(asistencia.AsistenciaId))
         {
             toast.ShowInfo("Eliminado");
             Limpiar();
@@ -278,7 +201,7 @@
 
     public void Limpiar()
     {
-        this.inscripcion = new Inscripcion();
+        this.asistencia = new Asistencia();
     }
 
 }
