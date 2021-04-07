@@ -77,7 +77,7 @@
         else
         {
             toast.ShowInfo("No pudo ser encontrado el registro.");
-            //Mensaje = (" no pudo ser encontrado el registro.");
+            
         }
     }
 
@@ -92,14 +92,14 @@
         if (await semestresBLL.Guardar(semestres))
         {
 
-            //Mensaje = ("Guardado");
+           
             toast.ShowSuccess("Guardado.");
             Limpiar();
 
         }
         else
         {
-            // Mensaje = ("No se ser guardado  el registro.");
+            
             toast.ShowError("Error al guardar el registro.");
 
         }
@@ -107,16 +107,17 @@
 
     public async void Eliminar()
     {
-        this.SemestreId = semestres.SemestreId;
+
         if (await semestresBLL.Eliminar(semestres.SemestreId))
         {
-            //Mensaje = ("Eliminado");
+            
             toast.ShowSuccess("Eliminado");
             Limpiar();
+            StateHasChanged();
         }
         else
         {
-            //Mensaje = ("No se logró eliminar el registro.");
+            
             toast.ShowError("Error al eliminar el registro.");
 
         }
