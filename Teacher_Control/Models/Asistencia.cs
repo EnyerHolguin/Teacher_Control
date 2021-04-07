@@ -12,7 +12,7 @@ namespace Teacher_Control.Models
         [Key]
         public int AsistenciaId { get; set; }
         public int EstudianteId { get; set; }
-        public DateTime FechaAsistencia { get; set; } 
+        public DateTime FechaAsistencia { get; set; }
         public int ConteoA { get; set; }
         public int ConteoP { get; set; }
         public int ConteoE { get; set; }

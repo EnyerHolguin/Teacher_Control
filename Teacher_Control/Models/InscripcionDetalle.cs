@@ -10,7 +10,7 @@ namespace Teacher_Control.Models
     {
         [Key]
         public int Id { get; set; }
-        public int IncripcionId { get; set; } 
+        public int IncripcionId { get; set; }
         public int EstudianteId { get; set; }
         public int AsignaturaId { get; set; }
         public int SemestreId { get; set; }

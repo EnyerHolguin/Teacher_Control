@@ -61,22 +61,20 @@
 
             </div>
 
-           
-
                 <tbody class="bg-white">
 
-                    @foreach (var item in listIncrip)
+                    @foreach (var item in listestud)
                     {
                         <tr>
                             <td>@item.EstudianteId</td>
-                            <td>@item.Estudiante.Nombres</td>
-                            <td>@item.Estudiante.Apellidos</td>
-                            <td>@item.Estudiante.Matricula</td>
+                            <td>@item.Nombres</td>
+                            <td>@item.Apellidos</td>
+                            <td>@item.Matricula</td>
                             <td>
                                 <InputNumber @bind-Value="teacherControl.Primer_parcial" class="form-control" />
                                 <ValidationMessage For="@(() => teacherControl.Primer_parcial)" />
                             </td>
-                            <td>@item.TeacherControl.Segundo_parcial</td>
+                           
                             
                         </tr>
                     }
@@ -135,10 +133,10 @@
 
     protected override async Task OnInitializedAsync()
     {
-        
-        
+
+        listestud = await estudiantesBLL.GetEstudiantes();
         listIncrip = await inscripcionBLL.GetInscripcion();
-        
+
         Nuevo();
     }
 
