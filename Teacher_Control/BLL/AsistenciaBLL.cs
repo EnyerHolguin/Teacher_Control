@@ -9,11 +9,11 @@ using Teacher_Control.Models;
 
 namespace Teacher_Control.BLL
 {
-    public class TeacherControlBLL
+    public class AsistenciaBLL
     {
         private ApplicationDbContext contexto { get; set; }
 
-        public TeacherControlBLL(ApplicationDbContext contexto)
+        public AsistenciaBLL(ApplicationDbContext contexto)
         {
             this.contexto = contexto;
         }
@@ -24,7 +24,7 @@ namespace Teacher_Control.BLL
             bool encontrado = false;
             try
             {
-                encontrado = await contexto.TeacherControl.AnyAsync(a => a.TeacherId == id);
+                encontrado = await contexto.Asistencia.AnyAsync(a => a.AsistenciaId == id);
             }
             catch (Exception)
             {
@@ -34,12 +34,12 @@ namespace Teacher_Control.BLL
         }
 
         //Metodo Insertar.
-        public async Task<bool> Insertar(TeacherControl teache)
+        public async Task<bool> Insertar(Asistencia asistencia)
         {
             bool paso = false;
             try
             {
-                await contexto.TeacherControl.AddAsync(teache);
+                await contexto.Asistencia.AddAsync(asistencia);
                 paso = await contexto.SaveChangesAsync() > 0;
             }
             catch (Exception)
@@ -52,12 +52,12 @@ namespace Teacher_Control.BLL
 
 
         //Metodo Modificar.
-        private async Task<bool> Modificar(TeacherControl teache)
+        private async Task<bool> Modificar(Asistencia asistencia)
         {
             bool paso = false;
             try
             {
-                contexto.Entry(teache).State = EntityState.Modified;
+                contexto.Entry(asistencia).State = EntityState.Modified;
                 paso = await contexto.SaveChangesAsync() > 0;
             }
             catch (Exception)
@@ -69,28 +69,28 @@ namespace Teacher_Control.BLL
         }
 
         //Guardar
-        public async Task<bool> Guardar(TeacherControl teache)
+        public async Task<bool> Guardar(Asistencia asistencia)
         {
-            if (!await Existe(teache.TeacherId))
-                return await Insertar(teache);
+            if (!await Existe(asistencia.AsistenciaId))
+                return await Insertar(asistencia);
             else
-                return await Modificar(teache);
+                return await Modificar(asistencia);
         }
 
         //Buscar
-        public async Task<TeacherControl> Buscar(int id)
+        public async Task<Asistencia> Buscar(int id)
         {
-            TeacherControl teache;
+            Asistencia asistencia;
             try
             {
-                teache = await contexto.TeacherControl.FindAsync(id);
+                asistencia = await contexto.Asistencia.FindAsync(id);
             }
             catch (Exception)
             {
                 throw;
             }
 
-            return teache;
+            return asistencia;
         }
 
         //Eliminar
@@ -99,10 +99,10 @@ namespace Teacher_Control.BLL
             bool paso = false;
             try
             {
-                var teache = await contexto.TeacherControl.FindAsync(id);
-                if (teache != null)
+                var asistencia = await contexto.Asistencia.FindAsync(id);
+                if (asistencia != null)
                 {
-                    contexto.TeacherControl.Remove(teache);
+                    contexto.Asistencia.Remove(asistencia);
                     paso = await contexto.SaveChangesAsync() > 0;
                 }
             }
@@ -115,12 +115,12 @@ namespace Teacher_Control.BLL
         }
 
         //GetList
-        public async Task<List<TeacherControl>> GetTeacherControl()
+        public async Task<List<Asistencia>> GetAsistencia()
         {
-            List<TeacherControl> lista = new List<TeacherControl>();
+            List<Asistencia> lista = new List<Asistencia>();
             try
             {
-                lista = await contexto.TeacherControl.ToListAsync();
+                lista = await contexto.Asistencia.ToListAsync();
             }
             catch (Exception)
             {
@@ -130,13 +130,13 @@ namespace Teacher_Control.BLL
             return lista;
         }
 
-        public async Task<List<TeacherControl>> GetList(Expression<Func<TeacherControl, bool>> criterio)
+        public async Task<List<Asistencia>> GetList(Expression<Func<Asistencia, bool>> criterio)
         {
-            List<TeacherControl> lista = new List<TeacherControl>();
+            List<Asistencia> lista = new List<Asistencia>();
 
             try
             {
-                lista = await contexto.TeacherControl.Where(criterio).ToListAsync();
+                lista = await contexto.Asistencia.Where(criterio).ToListAsync();
             }
             catch (Exception)
             {
@@ -145,8 +145,5 @@ namespace Teacher_Control.BLL
 
             return lista;
         }
-
     }
-
 }
-

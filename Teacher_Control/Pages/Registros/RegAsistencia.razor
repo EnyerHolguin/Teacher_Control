@@ -1,10 +1,10 @@
 ﻿@page "/Asistencia"
-
+@page "/Asistencia/{AsistenciaId:int}"
 @inject IToastService toast
 
 <div class="shadow-lg p-3 mb-5 bg-white rounded">
 
-    <EditForm Model="inscripcion" OnValidSubmit="Guardar">
+    <EditForm Model="asistencia" OnValidSubmit="Guardar">
         <DataAnnotationsValidator />
         <div class="card">
 
@@ -19,11 +19,11 @@
                             <div class="form-group">
                                 <label>Id</label>
                                 <div class="input-group">
-                                    <InputNumber @bind-Value="this.IncripcionId" class="form-control" />
+                                    <InputNumber @bind-Value="this.AsistenciaId" class="form-control" />
                                     <div class="input-group-append">
                                         <button type="button" style="z-index:0" class="btn btn-secondary" @onclick="Buscar">Buscar</button>
                                     </div>
-                                    <ValidationMessage For="@(() => inscripcion.IncripcionId)" />
+                                    <ValidationMessage For="@(() => asistencia.AsistenciaId)" />
                                 </div>
                             </div>
                         </div>
@@ -32,24 +32,14 @@
                     @*Fecha*@
                     <div class="form-group">
                         <label>Fecha</label>
-                        <InputDate @bind-Value="inscripcion.Fecha" class="form-control" />
-                        <ValidationMessage For="@(() => inscripcion.Fecha)" />
+                        <InputDate @bind-Value="asistencia.FechaAsistencia" class="form-control" />
+                        <ValidationMessage For="@(() => asistencia.FechaAsistencia)" />
                     </div>
 
                 </form>
 
                 @*Asignatura*@
-                <div class="form-group">
-                    <label>Asignatura</label>
-                    <InputSelect @bind-Value="inscripcion.IncripcionId" class="form-control" @onchange="Consultar">
-                        <option value="0" disabled selected>Seleccione una asignatura</option>
-                        @foreach (var item in listIncrip)
-                        {
-                            <option value="@item.IncripcionId"></option>
-                        }
-                    </InputSelect>
-                    <ValidationMessage For="(() => inscripcion.IncripcionId)" />
-                </div>
+                
             </div>
         </div>
 
@@ -64,27 +54,24 @@
                             <th>Nombres</th>
                             <th>Apellidos</th>
                             <th>Matricula</th>
-                            <th>Asistencia</th>
-                            <th></th>
+                            <th>A</th>
+                            <th>P</th>
+                            <th>E</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white">
 
-                        @foreach (var item in listIncrip)
+                        @foreach (var item in AsistList)
                         {
-                        <tr>
-                            <td>@item.Asignatura.Descripcion</td>
-                            <td>@item.Semestre.Descripcion</td>
-                            <td>@item.EstudianteId</td>
-                            <td>@item.Estudiante.Nombres</td>
-                            <td>@item.Estudiante.Apellidos</td>
-                            <td>@item.Estudiante.Matricula</td>
-                            <select id="so" name="so">
-                                <option value="A">A</option>
-                                <option value="P">P</option>
-                                <option value="E">E</option>
-                            </select>
-                        </tr>
+                            <tr>
+                                <td>@item.Asignatura.Descripcion</td>
+                                <td>@item.Semestre.Descripcion</td>
+                                <td>@item.EstudianteId</td>
+                                <td>@item.Estudiante.Nombres</td>
+                                <td>@item.Estudiante.Apellidos</td>
+                                <td>@item.Estudiante.Matricula</td>
+                                <td> <input type="checkbox" @onchange="CotejoCobrar" /> </td>
+                            </tr>
                         }
                     </tbody>
                 </table>
@@ -123,8 +110,12 @@
     [Inject]
     private AsignaturasBLL asignaturasBLL { get; set; }
 
+    [Inject]
+    private AsistenciaBLL asistenciaBLL { get; set; }
+
     [Parameter]
-    public int IncripcionId { get; set; }
+    public int AsistenciaId { get; set; }
+    private Asistencia asistencia = new Asistencia();
     private Inscripcion inscripcion = new Inscripcion();
     private Estudiantes estudiantes = new Estudiantes();
     private Semestres semestres = new Semestres();
@@ -134,6 +125,7 @@
     List<Asignaturas> listAsignat = new List<Asignaturas>();
     List<Semestres> listSemestres = new List<Semestres>();
     List<Inscripcion> listIncrip = new List<Inscripcion>();
+    List<Asistencia> AsistList = new List<Asistencia>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -172,6 +164,49 @@
     }
 
 
+    private async Task CotejoCobrar(ChangeEventArgs arg)
+    {
+
+        AsistList = await asistenciaBLL.GetList(v => v.AsistenciaId == asistencia.EstudianteId);
+
+        asistencia.EstudianteId = int.Parse(arg.Value.ToString());
+
+        if (asistencia.P == false)
+        {
+            asistencia.ConteoP++;
+        }
+        if (asistencia.E == false)
+        {
+            asistencia.ConteoE++;
+        }
+        else
+        {
+            asistencia.ConteoA++;
+        }
+
+        /*if (cobros.CobroId >= 0)
+            cobros.cobrosDetalles = await ventasBLL.GetVentasPorPagar(cobros.ClienteId);*/
+
+    }
+
+
+    /*private void CotejoCobrar(Asistencia asistencia)
+    {
+        if (asistencia.P == false)
+        {
+            asistencia.ConteoP++;
+        }
+        if (asistencia.E == false)
+        {
+            asistencia.ConteoE++;
+        }
+        else
+        {
+            asistencia.ConteoA++;
+        }
+
+    }*/
+
     public string Filtro { get; set; }
 
     public string Criterio { get; set; }
@@ -199,7 +234,7 @@
                     }
                 }
                 break;
-            
+
         }
 
     }

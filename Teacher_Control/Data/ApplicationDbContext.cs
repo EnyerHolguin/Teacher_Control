@@ -16,6 +16,7 @@ namespace Teacher_Control.Data
         }
 
         public virtual DbSet<Asignaturas> Asignatura { get; set; }
+        public virtual DbSet<Asistencia> Asistencia { get; set; }
         public virtual DbSet<Estudiantes> Estudiante { get; set; }
         public virtual DbSet<Inscripcion> Inscripcions { get; set; }
         public virtual DbSet<Semestres> Semestre { get; set; }
@@ -37,5 +38,6 @@ namespace Teacher_Control.Data
             modelBuilder.Entity<Asignaturas>().HasData(new Asignaturas() { AsignaturaId = 1, Descripcion = "Aplicada I" });
             modelBuilder.Entity<Asignaturas>().HasData(new Asignaturas() { AsignaturaId = 2, Descripcion = "Aplicada II" });
         }*/
+
     }
 }
