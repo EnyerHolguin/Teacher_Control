@@ -20,6 +20,7 @@ namespace Teacher_Control.Data
         public virtual DbSet<Inscripcion> Inscripcions { get; set; }
         public virtual DbSet<Semestres> Semestre { get; set; }
         public virtual DbSet<Adicionales> Adicionale { get; set; }
+        public virtual DbSet<TeacherControl> TeacherControl { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
