@@ -44,6 +44,21 @@
             </div>
         </div>
 
+
+        <div class="form-group">
+            <label>Asignaturas</label>
+            <InputSelect @bind-Value="inscripcion.AsignaturaId" class="form-control" @onchange="Consultar">
+                <option value="0" disabled selected>Seleccione una asignatura</option>
+                @foreach (var item in listAsignat)
+                {
+                    <option value="@item.AsignaturaId">@item.Descripcion </option>
+                }
+
+            </InputSelect>
+            <ValidationMessage For="(() => inscripcion.AsignaturaId)" />
+        </div>
+
+
         <div class="card-body">
             <div class="table-responsive text-nowrap" style="position: relative; height:200px; overflow: auto; display: block;">
                 <table class="table table-striped">
@@ -51,7 +66,7 @@
                         <tr>
                             <th>Asignaturas</th>
                             <th>Semestres</th>
-                            <th>ID</th>
+                            <th>Estudiante Id</th>
                             <th>Nombres</th>
                             <th>Apellidos</th>
                             <th>Matricula</th>
@@ -71,6 +86,8 @@
                             <td>@item.Estudiante.Nombres</td>
                             <td>@item.Estudiante.Apellidos</td>
                             <td>@item.Estudiante.Matricula</td>
+
+
                             <td> <input type="checkbox" @onchange="CotejoAsistencia" /> </td>
                             <td> <input type="checkbox" @onchange="CotejoAsistencia" /> </td>
                             <td> <input type="checkbox" @onchange="CotejoAsistencia" /> </td>
@@ -121,15 +138,14 @@
     public int AsistenciaId { get; set; }
     private Asistencia asistencia = new Asistencia();
     private Inscripcion inscripcion = new Inscripcion();
-    private Estudiantes estudiantes = new Estudiantes();
-    private Semestres semestres = new Semestres();
-    private Asignaturas asignaturas = new Asignaturas();
+
 
     List<Estudiantes> listestud = new List<Estudiantes>();
     List<Asignaturas> listAsignat = new List<Asignaturas>();
     List<Semestres> listSemestres = new List<Semestres>();
     List<Inscripcion> listIncrip = new List<Inscripcion>();
-    List<Asistencia> AsistList = new List<Asistencia>();
+    // List<Asistencia> AsistList = new List<Asistencia>();
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -137,8 +153,7 @@
         listAsignat = await asignaturasBLL.GetAsignaturas();
         listSemestres = await semestresBLL.Getsemestres();
         listIncrip = await inscripcionBLL.GetInscripcion();
-        
-        Nuevo();
+ 
     }
 
     public async void Buscar()
@@ -159,7 +174,33 @@
     private async Task CotejoAsistencia(ChangeEventArgs arg)
     {
 
-        
+
+    }
+
+
+    public string Filtro { get; set; }
+
+    public string Criterio { get; set; }
+
+    private void Nuevyo()
+    {
+        listIncrip = new List<Inscripcion>();
+        Filtro = "0";
+        Criterio = string.Empty;
+    }
+
+    public async void Consultar()
+    {
+        int id;
+        int.TryParse(Criterio, out id);
+        //string.TryParse(Criterio, out observacion);
+        switch (Filtro)
+        {
+            case "0": //Todo
+                listIncrip = await inscripcionBLL.GetList(c => true);
+                break;
+        }
+
     }
 
 

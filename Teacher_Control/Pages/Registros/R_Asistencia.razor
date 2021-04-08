@@ -1,0 +1,105 @@
+﻿@page "/AsistenciaR"
+@inject IToastService toast
+
+<div class="container shadow-lg p-3 rb-5 bg-white rounded col-md-16">
+
+    <div class="card-img">
+        <div class="card-header">
+            <h1>Asistencia</h1>
+        </div>
+
+        <div class="card-body">
+            <form>
+                <div class="form-row">
+                    
+                    
+                    
+
+                    
+
+                    <div class="form-group ml-1">
+                        <label>Criterio</label>
+                        <div class="input-group">
+                            <input type="text" @bind="Criterio" class="form-control">
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-primary input-group-text" @onclick="@(u => Consultar())"><i class="oi oi-list-rich" /> Consultar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive text-nowrap" style="position: relative; height:auto; overflow: auto; display: block;">
+                    <table class="table table-striped">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Estudiante Id</th>
+                                <th>Estudiante Id</th>
+                                <th>Fecha Nacimiento</th>
+                                <th>Matriculas</th>
+                                <th>Nombres</th>
+                                <th>Apellidos</th>
+
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white">
+                            @foreach (var item in InscripList)
+                            {
+                            <tr>
+                                <td>@item.Asignatura.Descripcion</td>
+                                <td>@item.Semestre.Descripcion</td>
+                                <td>@item.EstudianteId</td>
+                                <td>@item.Estudiante.Nombres</td>
+                                <td>@item.Estudiante.Apellidos</td>
+                                <td>@item.Estudiante.Matricula</td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+            <div>
+                <a href="https://localhost:5001/Estudiantes">Registro de Estudiantes</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+@code {
+
+    [Inject]
+    public InscripcionBLL inscripcionBLL { get; set; }
+
+    public List<Inscripcion> InscripList { get; set; }
+
+    public string Filtro { get; set; }
+
+    public string Criterio { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Nuevo();
+    }
+
+    private void Nuevo()
+    {
+        InscripList = new List<Inscripcion>();
+        Filtro = "0";
+        Criterio = string.Empty;
+    }
+
+    public async void Consultar()
+    {
+        int id;
+        int.TryParse(Criterio, out id);
+        switch (Filtro)
+        {
+            case "0": //Todo
+                InscripList = await inscripcionBLL.GetList(c => true);
+                break;
+            
+        }
+
+    }
+}
