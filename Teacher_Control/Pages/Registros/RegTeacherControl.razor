@@ -5,13 +5,244 @@
 
 <div class="shadow-lg p-3 mb-5 bg-white rounded">
 
-   
+    <EditForm Model="asistencia" OnValidSubmit="Guardar">
+        <DataAnnotationsValidator />
+        <div class="card">
+
+            <div class="card-header">
+                <h3>Registro de Asistencia</h3>
+            </div>
+
+            <div class="card-body">
+                <form>
+                    <div class="form-row align-items-center">
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Id</label>
+                                <div class="input-group">
+                                    <InputNumber @bind-Value="this.AsistenciaId" class="form-control" />
+                                    <div class="input-group-append">
+                                        <button type="button" style="z-index:0" class="btn btn-secondary" @onclick="Buscar">Buscar</button>
+                                    </div>
+                                    <ValidationMessage For="@(() => asistencia.AsistenciaId)" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @*Fecha*@
+                    <div class="form-group">
+                        <label>Fecha</label>
+                        <InputDate @bind-Value="asistencia.FechaAsistencia" class="form-control" />
+                        <ValidationMessage For="@(() => asistencia.FechaAsistencia)" />
+                    </div>
+
+                </form>
+
+                @*Asignatura*@
+
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label>Asignaturas</label>
+            <InputSelect @bind-Value="inscripcion.AsignaturaId" class="form-control" @onchange="Consultar">
+                <option value="0" disabled selected>Seleccione una asignatura</option>
+                @foreach (var item in listAsignat)
+                {
+                    <option value="@item.AsignaturaId">@item.Descripcion </option>
+                }
+
+            </InputSelect>
+            <ValidationMessage For="(() => inscripcion.AsignaturaId)" />
+        </div>
+
+
+        <div class="card-body">
+            <div class="table-responsive text-nowrap" style="position: relative; height:200px; overflow: auto; display: block;">
+                <table class="table table-striped">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Asignaturas</th>
+                            <th>Semestres</th>
+                            <th>Estudiante Id</th>
+                            <th>Nombres</th>
+                            <th>Apellidos</th>
+                            <th>Matricula</th>
+                            <th>A</th>
+                            <th>P</th>
+                            <th>E</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white">
+
+                        @foreach (var item in listIncrip)
+                        {
+                            <tr>
+                                <td>@item.Asignatura.Descripcion</td>
+                                <td>@item.Semestre.Descripcion</td>
+                                <td>@item.EstudianteId</td>
+                                <td>@item.Estudiante.Nombres</td>
+                                <td>@item.Estudiante.Apellidos</td>
+                                <td>@item.Estudiante.Matricula</td>
+
+
+                                <td> <input type="checkbox" @onchange="CotejoAsistencia" /> </td>
+                                <td> <input type="checkbox" @onchange="CotejoAsistencia" /> </td>
+                                <td> <input type="checkbox" @onchange="CotejoAsistencia" /> </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <div class="card-footer">
+                <div class="form-group text-center">
+                    <div class="form-group text-center">
+                        <button type="button" class="btn btn-primary" @onclick="Nuevo">Nuevo</button>
+                        <button type="submit" class="btn btn-success">Guardar</button>
+                        <button type="button" class="btn btn-danger" @onclick="Eliminar">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </EditForm>
 
 </div>
 
+@code {
+
+    [Inject]
+    private InscripcionBLL inscripcionBLL { get; set; }
+
+    [Inject]
+    private EstudiantesBLL estudiantesBLL { get; set; }
+
+    [Inject]
+    private SemestresBLL semestresBLL { get; set; }
+
+    [Inject]
+    private AsignaturasBLL asignaturasBLL { get; set; }
+
+    [Inject]
+    private AsistenciaBLL asistenciaBLL { get; set; }
+
+    [Parameter]
+    public int AsistenciaId { get; set; }
+    private Asistencia asistencia = new Asistencia();
+    private Inscripcion inscripcion = new Inscripcion();
 
 
-@code{
+    List<Estudiantes> listestud = new List<Estudiantes>();
+    List<Asignaturas> listAsignat = new List<Asignaturas>();
+    List<Semestres> listSemestres = new List<Semestres>();
+    List<Inscripcion> listIncrip = new List<Inscripcion>();
+    // List<Asistencia> AsistList = new List<Asistencia>();
 
-  
+
+    protected override async Task OnInitializedAsync()
+    {
+        listestud = await estudiantesBLL.GetEstudiantes();
+        listAsignat = await asignaturasBLL.GetAsignaturas();
+        listSemestres = await semestresBLL.Getsemestres();
+        listIncrip = await inscripcionBLL.GetInscripcion();
+
+    }
+
+    public async void Buscar()
+    {
+        var registro = await asistenciaBLL.Buscar(asistencia.AsistenciaId);
+
+        if (registro != null)
+        {
+            this.asistencia = registro;
+
+        }
+        else
+        {
+            toast.ShowInfo("pudo ser encontrado el registro.");
+        }
+    }
+
+    private async Task CotejoAsistencia(ChangeEventArgs arg)
+    {
+
+
+    }
+
+
+    public string Filtro { get; set; }
+
+    public string Criterio { get; set; }
+
+    private void Nuevyo()
+    {
+        listIncrip = new List<Inscripcion>();
+        Filtro = "0";
+        Criterio = string.Empty;
+    }
+
+    public async void Consultar()
+    {
+        int id;
+        int.TryParse(Criterio, out id);
+        //string.TryParse(Criterio, out observacion);
+        switch (Filtro)
+        {
+            case "0": //Todo
+                listIncrip = await inscripcionBLL.GetList(c => true);
+                break;
+        }
+
+    }
+
+
+    public void Nuevo()
+    {
+        Limpiar();
+    }
+
+    public async void Guardar()
+    {
+
+        if (await asistenciaBLL.Guardar(asistencia))
+        {
+
+            toast.ShowInfo("Guardado");
+            Limpiar();
+
+        }
+        else
+        {
+            toast.ShowInfo("No se ser guardado  el registro.");
+
+        }
+    }
+
+    public async void Eliminar()
+    {
+        if (await asistenciaBLL.Eliminar(asistencia.AsistenciaId))
+        {
+            toast.ShowInfo("Eliminado");
+            Limpiar();
+        }
+        else
+        {
+            toast.ShowInfo("No se logró eliminar el registro.");
+
+        }
+    }
+
+    public void Limpiar()
+    {
+        this.asistencia = new Asistencia();
+    }
+
 }
